@@ -11,7 +11,7 @@ datasource db {
 }
 
 model Examiner {
-  id        String      @id @default(uuid())
+  id        String   @id @default(uuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt()
 
@@ -22,6 +22,8 @@ model Examiner {
   surname    String
   faculty    String
   department String
+
+  exam Exam[]
 }
 
 model Candidate {
@@ -33,3 +35,27 @@ model Candidate {
   images        String[]
   fullname      String?
 }
+
+model Exam {
+  id         String   @id @default(uuid())
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt()
+  examiner   Examiner @relation(fields: [examinerId], references: [id])
+  examinerId String
+
+  courseName   String
+  courseCode   String
+  instructions String
+  duration     Int
+  quizCode     String?
+
+  // questions Question[]
+}
+
+// model Question {
+//   id        String   @id @default(uuid())
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt()
+//   exam      Exam     @relation(fields: [examId], references: [id])
+//   examId    String
+// }
