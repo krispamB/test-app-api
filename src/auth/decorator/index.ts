@@ -1,1 +1,1 @@
-export * from './examiner.decorator'
+export * from './examiner.decorator';

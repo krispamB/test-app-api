@@ -10,7 +10,15 @@ import { ExamService } from './exam.service';
 export class ExamController {
   constructor(private examService: ExamService) {}
   @Post('create')
-  async createTest(@Body() dto: CreateTestDto, @GetExaminer('id') examinerId: string): Promise<Exam> {
-    return await this.examService.createTest(dto, examinerId)
+  async createTest(
+    @Body() dto: CreateTestDto,
+    @GetExaminer('id') examinerId: string,
+  ): Promise<Exam> {
+    return await this.examService.createTest(dto, examinerId);
+  }
+
+  @Get('getAll')
+  getCreatedTests(@GetExaminer('id') examinerId: string): Promise<Exam[]> {
+    return this.examService.getCreatedTests(examinerId);
   }
 }

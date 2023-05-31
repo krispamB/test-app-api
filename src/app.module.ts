@@ -9,7 +9,13 @@ import { TestModule } from './test/test.module';
 import { ExamModule } from './exam/exam.module';
 
 @Module({
-  imports: [ConfigModule.forRoot({ isGlobal: true }), AuthModule, PrismaModule, TestModule, ExamModule],
+  imports: [
+    ConfigModule.forRoot({ isGlobal: true }),
+    AuthModule,
+    PrismaModule,
+    TestModule,
+    ExamModule,
+  ],
   controllers: [AppController],
   providers: [AppService, PrismaService],
 })

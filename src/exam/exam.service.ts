@@ -10,7 +10,17 @@ export class ExamService {
     const exam = await this.prisma.exam.create({
       data: { ...dto, examinerId },
     });
-    
+
     return exam;
+  }
+
+  async getCreatedTests(examinerId: string): Promise<Exam[]> {
+    const exams = await this.prisma.exam.findMany({
+      where: {
+        examinerId,
+      },
+    });
+
+    return exams;
   }
 }
