@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateTestDto } from './dto';
 import { Exam } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -22,5 +22,18 @@ export class ExamService {
     });
 
     return exams;
+  }
+
+  async getTestById(id: string): Promise<Exam> {
+    const exam = await this.prisma.exam.findUnique({
+      where: {
+        id,
+      },
+    });
+
+    if (!exam)
+      throw new NotFoundException('Could not find a test with the given ID')
+
+    return exam;
   }
 }

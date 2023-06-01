@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
 import { JwtGuard } from 'src/auth/Guard';
 import { CreateTestDto } from './dto';
 import { GetExaminer } from 'src/auth/decorator';
@@ -20,5 +20,10 @@ export class ExamController {
   @Get('getAll')
   getCreatedTests(@GetExaminer('id') examinerId: string): Promise<Exam[]> {
     return this.examService.getCreatedTests(examinerId);
+  }
+
+  @Get('get/:id')
+  getTestById(@Param('id') id: string) {
+    return this.examService.getTestById(id)
   }
 }
