@@ -1,6 +1,15 @@
-import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
 import { JwtGuard } from 'src/auth/Guard';
-import { CreateTestDto } from './dto';
+import { CreateTestDto, editTestDto } from './dto';
 import { GetExaminer } from 'src/auth/decorator';
 import { Exam } from '@prisma/client';
 import { ExamService } from './exam.service';
@@ -24,6 +33,23 @@ export class ExamController {
 
   @Get('get/:id')
   getTestById(@Param('id') id: string) {
-    return this.examService.getTestById(id)
+    return this.examService.getTestById(id);
+  }
+
+  @Patch('edit/:id')
+  editExam(
+    @GetExaminer('id') examinerId: string,
+    @Param('id') id: string,
+    @Body() dto: editTestDto,
+  ): Promise<object> {
+    return this.examService.editExam(examinerId, id, dto);
+  }
+
+  @Delete('delete/:id')
+  deleteExam(
+    @GetExaminer('id') examinerId: string,
+    @Param('id') id: string,
+  ): Promise<Object> {
+    return this.examService.deleteExam(examinerId, id);
   }
 }
