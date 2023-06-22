@@ -35,7 +35,10 @@
  - Submitting of test
  - Lecturers should be able to keep track of those that have written and those currently writing and those yet to write
  - Facial recognition or fingerprint authentication 😥
- - OTP for student to take exam 1hr before the exam 
+ - OTP for student to take exam 1hr before the exam
+
+## Docs
+- [Postman Docs](https://documenter.getpostman.com/view/20812049/2s93z5955V)
 
 ## Installation
 
