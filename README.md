@@ -38,7 +38,7 @@
  - OTP for student to take exam 1hr before the exam
 
 ## Docs
-- [Postman Docs](https://documenter.getpostman.com/view/20812049/2s93z5955V)
+- [Postman Docs](https://documenter.getpostman.com)
 
 ## Installation
 
