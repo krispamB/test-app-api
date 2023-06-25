@@ -58,6 +58,7 @@ export class ExamService {
 
     return {
       success: true,
+      dto: editTestDto,
       message: 'Your test was updated',
     };
   }
