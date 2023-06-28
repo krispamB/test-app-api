@@ -41,7 +41,7 @@ model Exam {
   id         String   @id @default(uuid())
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt()
-  examiner   Examiner @relation(fields: [examinerId], references: [id])
+  examiner   Examiner @relation(fields: [examinerId], references: [id], onDelete: Cascade)
   examinerId String
 
   courseName   String
@@ -58,7 +58,7 @@ model Question {
   id        String   @id @default(uuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt()
-  exam      Exam     @relation(fields: [examId], references: [id])
+  exam      Exam     @relation(fields: [examId], references: [id], onDelete: Cascade)
   examId    String
 
   question String
@@ -71,7 +71,7 @@ model Option {
   updatedAt  DateTime @updatedAt()
   exam       Exam     @relation(fields: [examId], references: [id])
   examId     String
-  question   Question @relation(fields: [questionId], references: [id])
+  question   Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
   questionId String
 
   option    String
