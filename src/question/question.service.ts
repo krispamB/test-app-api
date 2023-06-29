@@ -9,12 +9,12 @@ export class QuestionService {
   async createQuestion(
     dto: CreateQuestionDto,
     examId: string,
-  ): Promise<Question>{
-    const question = await this.prisma.question.create({
+  ): Promise<Question> {
+    const question: Question = await this.prisma.question.create({
       data: { question: dto.question, examId },
     });
 
-    if (!question) throw new BadRequestException('An error occured');
+    if (!question) throw new BadRequestException('An error occurred');
 
     dto.options.map(async (option: Option) => {
       await this.prisma.option.create({
@@ -22,10 +22,25 @@ export class QuestionService {
       });
     });
 
-    return question
+    return question;
   }
 
-  async getQuestion() {
-    return 'success'
+  async getQuestion(examId: string): Promise<Question[]> {
+    const questions: Question[] = await this.prisma.question.findMany({
+      where: {
+        examId,
+      },
+    });
+
+    return this.shuffleQuestions(questions);
+  }
+
+  shuffleQuestions<T>(arr: Question[]): Question[] {
+    const n = arr.length;
+    for (let i = n - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
   }
 }

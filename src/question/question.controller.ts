@@ -19,8 +19,8 @@ export class QuestionController {
     return this.questionService.createQuestion(dto, examId);
   }
 
-  @Get()
-  getQuestion() {
-    return this.questionService.getQuestion()
+  @Get('all/:id')
+  getQuestion(@Param('id') examId: string): Promise<Question[]> {
+    return this.questionService.getQuestion(examId)
   }
 }

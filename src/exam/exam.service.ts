@@ -7,7 +7,7 @@ import { PrismaService } from 'src/prisma/prisma.service';
 export class ExamService {
   constructor(private prisma: PrismaService) {}
   async createTest(dto: CreateTestDto, examinerId: string): Promise<Exam> {
-    const exam = await this.prisma.exam.create({
+    const exam: Exam = await this.prisma.exam.create({
       data: { ...dto, examinerId },
     });
 
@@ -18,7 +18,7 @@ export class ExamService {
   }
 
   async getCreatedTests(examinerId: string): Promise<Exam[]> {
-    const exams = await this.prisma.exam.findMany({
+    const exams: Exam[] = await this.prisma.exam.findMany({
       where: {
         examinerId,
       },
@@ -28,7 +28,7 @@ export class ExamService {
   }
 
   async getTestById(id: string): Promise<Exam> {
-    const exam = await this.prisma.exam.findUnique({
+    const exam: Exam = await this.prisma.exam.findUnique({
       where: {
         id,
       },
