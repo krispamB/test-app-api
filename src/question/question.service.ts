@@ -17,9 +17,11 @@ export class QuestionService {
     if (!question) throw new BadRequestException('An error occurred');
 
     dto.options.map(async (option: Option) => {
-      await this.prisma.option.create({
+      const added: Option = await this.prisma.option.create({
         data: { examId, questionId: question.id, ...option },
       });
+      if (!added) throw new BadRequestException('Option not uploaded');
+      // delete question created
     });
 
     return question;
