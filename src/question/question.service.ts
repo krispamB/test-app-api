@@ -1,5 +1,5 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { CreateQuestionDto, Option } from './dto';
+import { CreateQuestionDto, Option, UpdateQuestionDto } from './dto';
 import { Question } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
 
@@ -37,7 +37,40 @@ export class QuestionService {
     return this.shuffleQuestions(questions);
   }
 
-  shuffleQuestions<T>(arr: Question[]): Question[] {
+  async getOptions(questionId: string): Promise<Option[]> {
+    const options: Option[] = await this.prisma.option.findMany({
+      where: {
+        questionId,
+      },
+    });
+
+    return options;
+  }
+
+  async updateQuestion(
+    dto: UpdateQuestionDto,
+    questionId: string,
+  ): Promise<Question> {
+    const updatedQuestion: Question = await this.prisma.question.update({
+      where: {
+        id: questionId,
+      },
+      data: {
+        question: dto.question,
+      },
+    });
+
+    if (!updatedQuestion)
+      throw new BadRequestException(
+        'An error occurred while updating question',
+      );
+
+    return updatedQuestion;
+  }
+
+  async deleteQuestion() {}
+
+  shuffleQuestions(arr: Question[]): Question[] {
     const n = arr.length;
     for (let i = n - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
