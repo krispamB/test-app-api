@@ -18,11 +18,20 @@ export class AuthService {
   async signUp(dto: SignupDto): Promise<Object> {
     const password: string = await argon.hash(dto.password);
     try {
-      const examiner: Examiner = await this.prisma.examiner.create({
-        data: { ...dto, password },
+      const examiner: Examiner = await this.prisma.examiner.findUnique({
+        where: {
+          email: dto.email,
+        },
       });
-      delete examiner.password;
-      return examiner;
+      if (!examiner) {
+        const createdExaminer: Examiner = await this.prisma.examiner.create({
+          data: { ...dto, password },
+        });
+
+        delete createdExaminer.password;
+        return createdExaminer;
+      }
+      throw new ForbiddenException('Email already taken')
     } catch (error) {
       if (error instanceof PrismaClientKnownRequestError) {
         if (error.code === 'P2002')
