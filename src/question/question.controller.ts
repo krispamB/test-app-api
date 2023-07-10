@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpCode,
   HttpStatus,
@@ -46,5 +47,13 @@ export class QuestionController {
     @Param('id') questionId: string,
   ): Promise<Question> {
     return this.questionService.updateQuestion(dto, questionId);
+  }
+
+  @UseGuards(JwtGuard)
+  @Delete('delete/:id')
+  deleteQuestion(
+    @Param('id') questionId: string,
+  ): Promise<{success: boolean, message: string}> {
+    return this.questionService.deleteQuestion(questionId);
   }
 }

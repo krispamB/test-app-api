@@ -20,7 +20,10 @@ export class QuestionService {
       const added: Option = await this.prisma.option.create({
         data: { examId, questionId: question.id, ...option },
       });
-      if (!added) throw new BadRequestException('Option not uploaded');
+      if (!added) {
+        await this.deleteQuestion(question.id);
+        throw new BadRequestException('Option not uploaded');
+      }
       // delete question created
     });
 
@@ -68,7 +71,24 @@ export class QuestionService {
     return updatedQuestion;
   }
 
-  async deleteQuestion() {}
+  async deleteQuestion(
+    questionId: string,
+  ): Promise<{ success: boolean; message: string }> {
+    const successDelete: Question = await this.prisma.question.delete({
+      where: {
+        id: questionId,
+      },
+    });
+    if (!successDelete) {
+      throw new BadRequestException(
+        'An error occurred while deleting question',
+      );
+    }
+    return {
+      success: true,
+      message: 'Question deleted successfully',
+    };
+  }
 
   shuffleQuestions(arr: Question[]): Question[] {
     const n = arr.length;
