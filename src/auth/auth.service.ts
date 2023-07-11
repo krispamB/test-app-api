@@ -1,5 +1,5 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
-import { Examiner, PrismaClient } from '@prisma/client';
+import { Examiner, PrismaClient, Role } from '@prisma/client';
 import * as argon from 'argon2';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { SignupDto } from './dto';
@@ -31,7 +31,7 @@ export class AuthService {
         delete createdExaminer.password;
         return createdExaminer;
       }
-      throw new ForbiddenException('Email already taken')
+      throw new ForbiddenException('Email already taken');
     } catch (error) {
       if (error instanceof PrismaClientKnownRequestError) {
         if (error.code === 'P2002')
@@ -56,13 +56,17 @@ export class AuthService {
 
     delete user.password;
 
-    return { user, access_token: await this.signToken(user.id, user.email) };
+    return {
+      user,
+      access_token: await this.signToken(user.id, user.email, user.role),
+    };
   }
 
-  async signToken(id: string, email: string): Promise<string> {
+  async signToken(id: string, email: string, role: Role): Promise<string> {
     const payload = {
       sub: id,
       email,
+      role,
     };
 
     const token = await this.jwt.signAsync(payload, {

@@ -23,6 +23,7 @@ model Examiner {
   surname    String
   faculty    String
   department String
+  role       Role  @default(USER)
 
   exam Exam[]
 }
@@ -76,4 +77,9 @@ model Option {
 
   option    String
   isCorrect Boolean @default(false)
+}
+
+enum Role {
+  ADMIN
+  USER
 }
