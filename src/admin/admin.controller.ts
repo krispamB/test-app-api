@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Delete,
+  Get,
   Post,
   UnauthorizedException,
   UploadedFiles,
@@ -14,8 +15,11 @@ import { CreateCandidateDto } from './dto';
 import { GetExaminer } from 'src/auth/decorator';
 import { Examiner } from '@prisma/client';
 import { FilesInterceptor } from '@nestjs/platform-express';
+import { RolesDecorator } from './Decorator/role.decorator';
+import { RolesGuard } from './Guard/role.guard';
 
-@UseGuards(JwtGuard)
+@RolesDecorator('ADMIN')
+@UseGuards(JwtGuard, RolesGuard)
 @Controller('admin')
 export class AdminController {
   constructor(private adminService: AdminService) {}
@@ -30,9 +34,11 @@ export class AdminController {
     return this.adminService.addCandidate(examiner, dto, files);
   }
 
-  @Post('create')
-  create() {
-    return this.adminService.create();
+  @RolesDecorator('ADMIN')
+  @UseGuards(RolesGuard)
+  @Get('test')
+  test() {
+    return 'Amin route';
   }
 
   @Delete('clear')
