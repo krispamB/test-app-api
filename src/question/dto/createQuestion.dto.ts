@@ -9,7 +9,7 @@ export class CreateQuestionDto {
   options: Option[];
 }
 
-export class Option {
+class Option {
   @IsString()
   @IsNotEmpty()
   option: string;

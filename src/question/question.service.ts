@@ -1,7 +1,8 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { CreateQuestionDto, Option, UpdateQuestionDto } from './dto';
-import { Question } from '@prisma/client';
+import { CreateQuestionDto, UpdateQuestionDto } from './dto';
+import { Question, Option } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { CreateQuestionResponse } from './question.response';
 
 @Injectable()
 export class QuestionService {
@@ -9,25 +10,32 @@ export class QuestionService {
   async createQuestion(
     dto: CreateQuestionDto,
     examId: string,
-  ): Promise<Question> {
+  ): Promise<CreateQuestionResponse> {
     const question: Question = await this.prisma.question.create({
       data: { question: dto.question, examId },
     });
 
     if (!question) throw new BadRequestException('An error occurred');
 
-    dto.options.map(async (option: Option) => {
+    const createdOptions: Option[] = [];
+
+    for (const option of dto.options) {
       const added: Option = await this.prisma.option.create({
         data: { examId, questionId: question.id, ...option },
       });
+
       if (!added) {
         await this.deleteQuestion(question.id);
         throw new BadRequestException('Option not uploaded');
       }
-      // delete question created
-    });
 
-    return question;
+      createdOptions.push(added);
+    }
+
+    return {
+      question,
+      options: createdOptions,
+    };
   }
 
   async getQuestion(examId: string): Promise<Question[]> {

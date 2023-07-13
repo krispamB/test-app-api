@@ -11,10 +11,11 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { JwtGuard } from 'src/auth/Guard';
-import { CreateQuestionDto, Option, UpdateQuestionDto } from './dto';
+import { CreateQuestionDto, UpdateQuestionDto } from './dto';
 import { GetExaminer } from 'src/auth/decorator';
-import { Question } from '@prisma/client';
+import { Question, Option } from '@prisma/client';
 import { QuestionService } from './question.service';
+import { CreateQuestionResponse } from './question.response';
 
 @Controller('question')
 export class QuestionController {
@@ -26,7 +27,7 @@ export class QuestionController {
   createQuestion(
     @Body() dto: CreateQuestionDto,
     @Param('id') examId: string,
-  ): Promise<Question> {
+  ): Promise<CreateQuestionResponse> {
     return this.questionService.createQuestion(dto, examId);
   }
 
