@@ -23,13 +23,13 @@ model Examiner {
   surname    String
   faculty    String
   department String
-  role       Role  @default(USER)
+  role       Role   @default(USER)
 
   exam Exam[]
 }
 
 model Candidate {
-  id        Int      @id @default(autoincrement())
+  id        String   @id @default(uuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt()
 

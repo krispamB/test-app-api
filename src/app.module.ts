@@ -11,6 +11,7 @@ import { QuestionModule } from './question/question.module';
 import { AdminController } from './admin/admin.controller';
 import { AdminService } from './admin/admin.service';
 import { AdminModule } from './admin/admin.module';
+import { CloudinaryModule } from './cloudinary/cloudinary.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { AdminModule } from './admin/admin.module';
     ExamModule,
     QuestionModule,
     AdminModule,
+    CloudinaryModule,
   ],
   controllers: [AppController, AdminController],
   providers: [AppService, PrismaService, AdminService],

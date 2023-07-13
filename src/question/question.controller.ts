@@ -53,7 +53,7 @@ export class QuestionController {
   @Delete('delete/:id')
   deleteQuestion(
     @Param('id') questionId: string,
-  ): Promise<{success: boolean, message: string}> {
+  ): Promise<{ success: boolean; message: string }> {
     return this.questionService.deleteQuestion(questionId);
   }
 }

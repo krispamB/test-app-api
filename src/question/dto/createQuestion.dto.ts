@@ -1,20 +1,19 @@
-import { IsNotEmpty, IsOptional, IsString } from "class-validator"
+import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 export class CreateQuestionDto {
   @IsString()
   @IsNotEmpty()
-  question: string
+  question: string;
 
   @IsNotEmpty()
-  options: Option[]
-
+  options: Option[];
 }
 
 export class Option {
   @IsString()
   @IsNotEmpty()
-  option: string
+  option: string;
 
   @IsOptional()
-  isCorrect?: boolean
+  isCorrect?: boolean;
 }
