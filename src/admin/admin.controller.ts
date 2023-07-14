@@ -26,7 +26,13 @@ export class AdminController {
   constructor(private adminService: AdminService) {}
 
   @Post('candidate')
-  @UseInterceptors(FilesInterceptor('images'))
+  @UseInterceptors(
+    FilesInterceptor('images', 2, {
+      limits: {
+        fileSize: 20_000_000,
+      },
+    }),
+  )
   addCandidate(
     @Body() dto: CreateCandidateDto,
     @UploadedFiles() files: Array<Express.Multer.File>,
