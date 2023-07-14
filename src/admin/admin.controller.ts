@@ -29,7 +29,7 @@ export class AdminController {
   @UseInterceptors(
     FilesInterceptor('images', 2, {
       limits: {
-        fileSize: 20_000_000,
+        fileSize: 20 * 1024 * 1024,
       },
     }),
   )
