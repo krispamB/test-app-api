@@ -17,6 +17,7 @@ import { Examiner } from '@prisma/client';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { RolesDecorator } from './Decorator/role.decorator';
 import { RolesGuard } from './Guard/role.guard';
+import { GetCandidateResponse } from './admin.response';
 
 @RolesDecorator('ADMIN')
 @UseGuards(JwtGuard, RolesGuard)
@@ -27,12 +28,22 @@ export class AdminController {
   @Post('candidate')
   @UseInterceptors(FilesInterceptor('images'))
   addCandidate(
-    @GetExaminer() examiner: Examiner,
     @Body() dto: CreateCandidateDto,
     @UploadedFiles() files: Array<Express.Multer.File>,
   ) {
-    return this.adminService.addCandidate(examiner, dto, files);
+    return this.adminService.addCandidate(dto, files);
   }
+
+  @Get('candidate')
+  getCandidates(): Promise<GetCandidateResponse> {
+    return this.adminService.getCandidate();
+  }
+
+  @Get('candidate/:id')
+  getCandidateById() {}
+
+  @Get('examiners')
+  getExaminers() {}
 
   @RolesDecorator('ADMIN')
   @UseGuards(RolesGuard)

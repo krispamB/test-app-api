@@ -3,6 +3,7 @@ import { Candidate, Examiner } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateCandidateDto } from './dto';
 import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
+import { GetCandidateResponse } from './admin.response';
 
 @Injectable()
 export class AdminService {
@@ -11,13 +12,9 @@ export class AdminService {
     private cloudinary: CloudinaryService,
   ) {}
   async addCandidate(
-    examiner: Examiner,
     dto: CreateCandidateDto,
     files: Array<Express.Multer.File>,
   ) {
-    if (examiner.role !== 'ADMIN')
-      throw new UnauthorizedException('You are not authorized');
-
     const result: string[] = await this.cloudinary.uploadFiles(
       files,
       dto.fullname,
@@ -28,6 +25,12 @@ export class AdminService {
     });
 
     return newCandidate;
+  }
+
+  async getCandidate(): Promise<GetCandidateResponse> {
+    const candidates = await this.prisma.candidate.findMany();
+
+    return candidates;
   }
 
   async create() {
