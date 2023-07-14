@@ -1,6 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { Logger, ValidationPipe } from '@nestjs/common';
+import * as bodyparser from 'body-parser';
 
 async function bootstrap() {
   const logger = new Logger('AppBootstrap');
@@ -12,6 +13,11 @@ async function bootstrap() {
       transform: true,
     }),
   );
+
+  //test fix
+  app.use(bodyparser.json({ limit: '50mb' }));
+  app.use(bodyparser.urlencoded({ limit: '50mb', extended: true }));
+
   app.setGlobalPrefix('api/v1');
   const PORT = process.env.PORT || 3000;
 
