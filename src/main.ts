@@ -14,6 +14,7 @@ async function bootstrap() {
     }),
   );
 
+  app.useBodyParser('json', { limit: '10mb' });
   app.useBodyParser('urlencoded', { limit: '50mb' });
 
   app.setGlobalPrefix('api/v1');
