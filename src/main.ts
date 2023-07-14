@@ -1,11 +1,11 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { Logger, ValidationPipe } from '@nestjs/common';
-import * as bodyparser from 'body-parser';
+import { NestExpressApplication } from '@nestjs/platform-express';
 
 async function bootstrap() {
   const logger = new Logger('AppBootstrap');
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create<NestExpressApplication>(AppModule);
   app.enableCors();
   app.useGlobalPipes(
     new ValidationPipe({
@@ -14,9 +14,7 @@ async function bootstrap() {
     }),
   );
 
-  //test fix
-  app.use(bodyparser.json({ limit: '50mb' }));
-  app.use(bodyparser.urlencoded({ limit: '50mb', extended: true }));
+  app.useBodyParser('urlencoded', { limit: '50mb' });
 
   app.setGlobalPrefix('api/v1');
   const PORT = process.env.PORT || 3000;
