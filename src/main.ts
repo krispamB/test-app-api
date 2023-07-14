@@ -5,7 +5,9 @@ import { NestExpressApplication } from '@nestjs/platform-express';
 
 async function bootstrap() {
   const logger = new Logger('AppBootstrap');
-  const app = await NestFactory.create<NestExpressApplication>(AppModule);
+  const app = await NestFactory.create<NestExpressApplication>(AppModule, {
+    rawBody: true,
+  });
   app.enableCors();
   app.useGlobalPipes(
     new ValidationPipe({
