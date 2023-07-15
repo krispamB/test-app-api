@@ -27,8 +27,17 @@ export class AdminService {
     return newCandidate;
   }
 
-  async getCandidate(): Promise<GetCandidateResponse> {
-    const candidates = await this.prisma.candidate.findMany();
+  async getCandidate(search: string): Promise<GetCandidateResponse> {
+    const keywords = search ? search : '';
+
+    const candidates = await this.prisma.candidate.findMany({
+      where: {
+        matric_number: {
+          contains: keywords,
+          mode: 'insensitive',
+        },
+      },
+    });
 
     return candidates;
   }

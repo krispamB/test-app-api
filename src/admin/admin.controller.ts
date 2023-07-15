@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   Post,
+  Query,
   UnauthorizedException,
   UploadedFiles,
   UseGuards,
@@ -41,8 +42,10 @@ export class AdminController {
   }
 
   @Get('candidate')
-  getCandidates(): Promise<GetCandidateResponse> {
-    return this.adminService.getCandidate();
+  getCandidates(
+    @Query('search') search: string,
+  ): Promise<GetCandidateResponse> {
+    return this.adminService.getCandidate(search);
   }
 
   @Get('candidate/:id')
