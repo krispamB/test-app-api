@@ -3,6 +3,8 @@ import {
   Controller,
   Delete,
   Get,
+  Param,
+  Patch,
   Post,
   Query,
   UnauthorizedException,
@@ -13,34 +15,30 @@ import {
 import { AdminService } from './admin.service';
 import { JwtGuard } from 'src/auth/Guard';
 import { CreateCandidateDto } from './dto';
-import { GetExaminer } from 'src/auth/decorator';
-import { Examiner } from '@prisma/client';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { RolesDecorator } from './Decorator/role.decorator';
 import { RolesGuard } from './Guard/role.guard';
-import { GetCandidateResponse } from './admin.response';
+import {
+  GetCandidateByIdResponse,
+  GetCandidateResponse,
+  GetExaminersResponse,
+  GetExamsResponses,
+} from './admin.response';
 
-@RolesDecorator('ADMIN')
-@UseGuards(JwtGuard, RolesGuard)
+@UseGuards(JwtGuard)
 @Controller('admin')
 export class AdminController {
   constructor(private adminService: AdminService) {}
 
+  @RolesDecorator('ADMIN')
+  @UseGuards(RolesGuard)
   @Post('candidate')
-  @UseInterceptors(
-    FilesInterceptor('images', 2, {
-      limits: {
-        fileSize: 20 * 1024 * 1024,
-      },
-    }),
-  )
-  addCandidate(
-    @Body() dto: CreateCandidateDto,
-    @UploadedFiles() files: Array<Express.Multer.File>,
-  ) {
-    return this.adminService.addCandidate(dto, files);
+  addCandidate(@Body() dto: CreateCandidateDto) {
+    return this.adminService.addCandidate(dto);
   }
 
+  @RolesDecorator('ADMIN')
+  @UseGuards(RolesGuard)
   @Get('candidate')
   getCandidates(
     @Query('search') search: string,
@@ -48,11 +46,34 @@ export class AdminController {
     return this.adminService.getCandidate(search);
   }
 
+  @RolesDecorator('ADMIN')
+  @UseGuards(RolesGuard)
   @Get('candidate/:id')
-  getCandidateById() {}
+  getCandidateById(
+    @Param('id') candidateId: string,
+  ): Promise<GetCandidateByIdResponse> {
+    return this.adminService.getCandidateById(candidateId);
+  }
 
+  @RolesDecorator('ADMIN')
+  @UseGuards(RolesGuard)
   @Get('examiners')
-  getExaminers() {}
+  getExaminers(): Promise<GetExaminersResponse> {
+    return this.adminService.getExaminers();
+  }
+
+  @RolesDecorator('ADMIN')
+  @UseGuards(RolesGuard)
+  @Get('exams')
+  getCreatedExams(): Promise<GetExamsResponses> {
+    return this.adminService.getCreatedExams();
+  }
+
+  @Patch('candidate')
+  updateCandidate() {}
+
+  @Delete('candidate')
+  deleteCandidate() {}
 
   @RolesDecorator('ADMIN')
   @UseGuards(RolesGuard)
@@ -61,6 +82,8 @@ export class AdminController {
     return 'Amin route';
   }
 
+  @RolesDecorator('ADMIN')
+  @UseGuards(RolesGuard)
   @Delete('clear')
   cleanDb() {
     return this.adminService.cleanDb();

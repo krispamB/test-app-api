@@ -1,27 +1,30 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { Candidate, Examiner } from '@prisma/client';
+import { BadRequestException, Injectable } from '@nestjs/common';
+import { Candidate } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateCandidateDto } from './dto';
-import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
-import { GetCandidateResponse } from './admin.response';
+import {
+  GetCandidateByIdResponse,
+  GetCandidateResponse,
+  GetExaminersResponse,
+  GetExamsResponses,
+} from './admin.response';
 
 @Injectable()
 export class AdminService {
-  constructor(
-    private prisma: PrismaService,
-    private cloudinary: CloudinaryService,
-  ) {}
-  async addCandidate(
-    dto: CreateCandidateDto,
-    files: Array<Express.Multer.File>,
-  ) {
-    const result: string[] = await this.cloudinary.uploadFiles(
-      files,
-      dto.fullname,
-    );
+  constructor(private prisma: PrismaService) {}
+  async addCandidate(dto: CreateCandidateDto) {
+    const candidateExists = await this.prisma.candidate.findUnique({
+      where: {
+        matric_number: dto.matric_number,
+      },
+    });
+
+    if (candidateExists) {
+      throw new BadRequestException('Candidate already exists');
+    }
 
     const newCandidate: Candidate = await this.prisma.candidate.create({
-      data: { images: result, ...dto },
+      data: dto,
     });
 
     return newCandidate;
@@ -40,6 +43,24 @@ export class AdminService {
     });
 
     return candidates;
+  }
+
+  async getCandidateById(
+    candidateId: string,
+  ): Promise<GetCandidateByIdResponse> {
+    return await this.prisma.candidate.findUnique({
+      where: {
+        id: candidateId,
+      },
+    });
+  }
+
+  async getExaminers(): Promise<GetExaminersResponse> {
+    return await this.prisma.examiner.findMany();
+  }
+
+  async getCreatedExams(): Promise<GetExamsResponses> {
+    return await this.prisma.exam.findMany();
   }
 
   async create() {
