@@ -69,8 +69,12 @@ export class AdminController {
     return this.adminService.getCreatedExams();
   }
 
-  @Patch('candidate')
-  updateCandidate() {}
+  @RolesDecorator('ADMIN')
+  @UseGuards(RolesGuard)
+  @Patch('candidate/:id')
+  updateCandidate(@Param('id') candidateId: string) {
+    return this.adminService.updateCandidates(candidateId);
+  }
 
   @Delete('candidate')
   deleteCandidate() {}

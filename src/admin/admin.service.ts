@@ -63,6 +63,12 @@ export class AdminService {
     return await this.prisma.exam.findMany();
   }
 
+  async updateCandidates(candidateId: string) {
+    //delete images from cloudinary
+    //update db with new image string
+    //
+  }
+
   async create() {
     await this.prisma.create();
   }
