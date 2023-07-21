@@ -12,7 +12,7 @@ export class ExamService {
     });
 
     if (!exam)
-      throw new BadRequestException('THeir was a problem creating the test');
+      throw new BadRequestException('Their was a problem creating the test');
 
     return exam;
   }
@@ -61,6 +61,25 @@ export class ExamService {
       dto: editTestDto,
       message: 'Your test was updated',
     };
+  }
+
+  async editIsActive(examId: string): Promise<Exam> {
+    const current = await this.prisma.exam.findUnique({
+      where: {
+        id: examId,
+      },
+    });
+
+    const exam = await this.prisma.exam.update({
+      where: {
+        id: examId,
+      },
+      data: {
+        isActive: !current.isActive,
+      },
+    });
+
+    return exam;
   }
 
   //Remember to add special delete when I add Questions and Options Model

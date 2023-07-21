@@ -86,6 +86,13 @@ export class AdminController {
     return 'Amin route';
   }
 
+  // @RolesDecorator('ADMIN')
+  // @UseGuards(RolesGuard)
+  @Post('create')
+  create() {
+    return this.adminService.create();
+  }
+
   @RolesDecorator('ADMIN')
   @UseGuards(RolesGuard)
   @Delete('clear')

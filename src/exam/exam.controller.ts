@@ -45,6 +45,11 @@ export class ExamController {
     return this.examService.editExam(examinerId, id, dto);
   }
 
+  @Patch('isActive/:id')
+  editIsActive(@Param('id') examId: string): Promise<Exam> {
+    return this.examService.editIsActive(examId);
+  }
+
   @Delete('delete/:id')
   deleteExam(
     @GetExaminer('id') examinerId: string,

@@ -50,6 +50,7 @@ model Exam {
   instructions String
   duration     Int
   quizCode     String?
+  isActive     Boolean @default(false)
 
   questions Question[]
   options   Option[]
