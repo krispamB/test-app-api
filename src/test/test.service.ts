@@ -1,10 +1,35 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { GetActiveTestsResponse, GetTestByIdResponse } from './test.responses';
+import {
+  FaceVerifyResponse,
+  GetActiveTestsResponse,
+  GetTestByIdResponse,
+} from './test.responses';
+import { FaceVerifyDto } from './dto';
 
 @Injectable()
 export class TestService {
   constructor(private prisma: PrismaService) {}
+
+  async faceVerify(dto: FaceVerifyDto): Promise<FaceVerifyResponse> {
+    const candidate = await this.prisma.candidate.findMany({
+      where: {
+        matric_number: {
+          contains: dto.matric_number,
+          mode: 'insensitive',
+        },
+      },
+    });
+
+    if (candidate.length < 1)
+      return new NotFoundException('Candidate not found');
+
+    return candidate[0];
+  }
 
   async getActiveTests(): Promise<GetActiveTestsResponse> {
     const activeTests = await this.prisma.exam.findMany({
