@@ -31,6 +31,10 @@ export class TestService {
     return candidate[0];
   }
 
+  async codeVerify() {}
+
+  async startSession() {}
+
   async getActiveTests(): Promise<GetActiveTestsResponse> {
     const activeTests = await this.prisma.exam.findMany({
       where: {

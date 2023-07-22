@@ -7,7 +7,7 @@ import { FaceVerifyDto } from './dto';
 export class TestController {
   constructor(private testService: TestService) {}
 
-  //return candidate for face
+  //return candidate for face recognition
   @Post('faceverify')
   faceVerify(@Body() dto: FaceVerifyDto): Promise<FaceVerifyResponse> {
     return this.testService.faceVerify(dto);
@@ -25,5 +25,6 @@ export class TestController {
     return this.testService.getTestById(examId);
   }
 
+  @Post()
   submitTest() {}
 }
