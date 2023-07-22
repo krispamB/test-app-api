@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { TestService } from './test.service';
 import { FaceVerifyResponse, GetActiveTestsResponse } from './test.responses';
 import { FaceVerifyDto } from './dto';
@@ -7,7 +7,8 @@ import { FaceVerifyDto } from './dto';
 export class TestController {
   constructor(private testService: TestService) {}
 
-  @Get('faceverify')
+  //return candidate for face
+  @Post('faceverify')
   faceVerify(@Body() dto: FaceVerifyDto): Promise<FaceVerifyResponse> {
     return this.testService.faceVerify(dto);
   }
