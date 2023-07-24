@@ -2,7 +2,9 @@ import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { TestService } from './test.service';
 import { FaceVerifyResponse, GetActiveTestsResponse } from './test.responses';
 import { FaceVerifyDto } from './dto';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Test')
 @Controller('test')
 export class TestController {
   constructor(private testService: TestService) {}

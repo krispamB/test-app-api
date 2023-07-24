@@ -16,7 +16,9 @@ import { GetExaminer } from 'src/auth/decorator';
 import { Question, Option } from '@prisma/client';
 import { QuestionService } from './question.service';
 import { CreateQuestionResponse } from './question.response';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Question')
 @Controller('question')
 export class QuestionController {
   constructor(private questionService: QuestionService) {}

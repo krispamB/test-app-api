@@ -24,7 +24,9 @@ import {
   GetExaminersResponse,
   GetExamsResponses,
 } from './admin.response';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Admin')
 @UseGuards(JwtGuard)
 @Controller('admin')
 export class AdminController {

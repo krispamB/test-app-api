@@ -13,7 +13,9 @@ import { CreateTestDto, editTestDto } from './dto';
 import { GetExaminer } from 'src/auth/decorator';
 import { Exam } from '@prisma/client';
 import { ExamService } from './exam.service';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Exam')
 @UseGuards(JwtGuard)
 @Controller('exam')
 export class ExamController {
