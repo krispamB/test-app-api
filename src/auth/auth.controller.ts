@@ -12,10 +12,11 @@ import { SignInDto } from './dto';
 import {
   ApiCreatedResponse,
   ApiForbiddenResponse,
+  ApiOkResponse,
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import { SignupResponse } from './auth.response';
+import { SigninResponse, SignupResponse } from './auth.response';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -33,9 +34,15 @@ export class AuthController {
     return this.authService.signUp(dto);
   }
 
+  @ApiOkResponse({
+    description: 'User signin success',
+  })
+  @ApiForbiddenResponse({
+    description: 'Wrong credentials',
+  })
   @HttpCode(HttpStatus.OK)
   @Post('signin')
-  signIn(@Body() dto: SignInDto): Promise<Object> {
+  signIn(@Body() dto: SignInDto): Promise<SigninResponse> {
     return this.authService.signIn(dto);
   }
 }

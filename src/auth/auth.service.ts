@@ -7,7 +7,7 @@ import { PrismaClientKnownRequestError } from '@prisma/client/runtime';
 import { SignInDto } from './dto';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
-import { SignupResponse } from './auth.response';
+import { SigninResponse, SignupResponse } from './auth.response';
 
 @Injectable()
 export class AuthService {
@@ -42,7 +42,7 @@ export class AuthService {
     }
   }
 
-  async signIn(dto: SignInDto): Promise<Object> {
+  async signIn(dto: SignInDto): Promise<SigninResponse> {
     const user: Examiner = await this.prisma.examiner.findUnique({
       where: {
         email: dto.email,
