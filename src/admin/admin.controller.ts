@@ -19,6 +19,7 @@ import { FilesInterceptor } from '@nestjs/platform-express';
 import { RolesDecorator } from './Decorator/role.decorator';
 import { RolesGuard } from './Guard/role.guard';
 import {
+  CreateEmergencyCodeResponse,
   GetCandidateByIdResponse,
   GetCandidateResponse,
   GetExaminersResponse,
@@ -78,6 +79,15 @@ export class AdminController {
     return this.adminService.updateCandidates(candidateId);
   }
 
+  @RolesDecorator('ADMIN')
+  @UseGuards(RolesGuard)
+  @Patch('code/:id')
+  createEmergencyCode(
+    @Param('id') candidateId: string,
+  ): Promise<CreateEmergencyCodeResponse> {
+    return this.adminService.createEmergencyCode(candidateId);
+  }
+
   @Delete('candidate')
   deleteCandidate() {}
 
@@ -88,8 +98,8 @@ export class AdminController {
     return 'Amin route';
   }
 
-  // @RolesDecorator('ADMIN')
-  // @UseGuards(RolesGuard)
+  @RolesDecorator('ADMIN')
+  @UseGuards(RolesGuard)
   @Post('create')
   create() {
     return this.adminService.create();

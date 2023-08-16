@@ -36,6 +36,7 @@ model Candidate {
   matric_number String   @unique
   images        String[]
   fullname      String?
+  emergencyCode  String?
 }
 
 model Exam {

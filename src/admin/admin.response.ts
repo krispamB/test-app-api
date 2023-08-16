@@ -4,3 +4,4 @@ export type GetCandidateResponse = Candidate[];
 export type GetCandidateByIdResponse = Candidate;
 export type GetExaminersResponse = Examiner[];
 export type GetExamsResponses = Exam[];
+export type CreateEmergencyCodeResponse = Candidate

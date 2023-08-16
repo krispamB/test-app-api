@@ -10,6 +10,12 @@ import {
   GetTestByIdResponse,
 } from './test.responses';
 import { FaceVerifyDto } from './dto';
+import { CodeVerifyDto } from './dto/codeVerify.dto';
+
+/*Update candidate table to contain an emergencyCode field that is a null value by default
+ create an emergencyCode function that creates a 6 digit code and patches the candidate 
+  the student signs in by using the code given to them*/
+
 
 @Injectable()
 export class TestService {
@@ -31,7 +37,9 @@ export class TestService {
     return candidate[0];
   }
 
-  async codeVerify() {}
+  async codeVerify(dto: CodeVerifyDto) {
+  
+  }
 
   async startSession() {}
 
