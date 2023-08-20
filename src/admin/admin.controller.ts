@@ -36,8 +36,9 @@ export class AdminController {
   @RolesDecorator('ADMIN')
   @UseGuards(RolesGuard)
   @Post('candidate')
-  addCandidate(@Body() dto: CreateCandidateDto) {
-    return this.adminService.addCandidate(dto);
+  @UseInterceptors(FilesInterceptor('files'))
+  addCandidate(@Body() dto: CreateCandidateDto, @UploadedFiles() files: Express.Multer.File[]) {
+    return this.adminService.addCandidate(dto, files);
   }
 
   @RolesDecorator('ADMIN')

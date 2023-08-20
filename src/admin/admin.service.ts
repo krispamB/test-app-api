@@ -10,14 +10,21 @@ import {
   GetExamsResponses,
 } from './admin.response';
 import * as crypto from 'crypto';
+import { FaceRecognitionService } from 'src/face-recognition/face-recognition.service';
+import { CreatePerson } from 'src/face-recognition/face-recognition.types';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class AdminService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private face: FaceRecognitionService,
+    private config: ConfigService,
+  ) {}
 
-  private CODE_LENGTH: number = 6
+  private CODE_LENGTH: number = 6;
 
-  async addCandidate(dto: CreateCandidateDto) {
+  async addCandidate(dto: CreateCandidateDto, files: Express.Multer.File[]) {
     const candidateExists = await this.prisma.candidate.findUnique({
       where: {
         matric_number: dto.matric_number,
@@ -29,8 +36,31 @@ export class AdminService {
     }
 
     const newCandidate: Candidate = await this.prisma.candidate.create({
-      data: dto,
+      data: {
+        fullname: dto.fullname,
+        images: dto.images,
+        matric_number: dto.matric_number,
+      },
     });
+
+    const base64Strings: string[] = files.map((file) => {
+      return file.buffer.toString('base64')
+    })
+
+
+    const createFaceData: CreatePerson = {
+      id: newCandidate.id,
+      name: newCandidate.fullname,
+      images: base64Strings,
+      gender: dto.gender,
+      date_of_birth: dto.dateOfBirth,
+      nationality: dto.nationality,
+      collections: [this.config.get('COLLECTION_ID')],
+      is_bulk_insert: false,
+    };
+
+    await this.face.createPerson(createFaceData)
+    ;
 
     return newCandidate;
   }
@@ -74,7 +104,9 @@ export class AdminService {
     //
   }
 
-  async createEmergencyCode(candidateId: string): Promise<CreateEmergencyCodeResponse> {
+  async createEmergencyCode(
+    candidateId: string,
+  ): Promise<CreateEmergencyCodeResponse> {
     let code: string;
     code = await this.generateRandomCode(this.CODE_LENGTH);
 

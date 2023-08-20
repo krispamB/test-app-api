@@ -1,4 +1,4 @@
-import { IsArray, IsString } from 'class-validator';
+import { IsArray, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 export class CreateCandidateDto {
   @IsString()
@@ -9,4 +9,13 @@ export class CreateCandidateDto {
 
   @IsArray()
   images: string[];
+
+  @IsOptional()
+  dateOfBirth: string;
+
+  @IsOptional()
+  nationality: string;
+
+  @IsOptional()
+  gender: string;
 }

@@ -12,6 +12,7 @@ import { AdminController } from './admin/admin.controller';
 import { AdminService } from './admin/admin.service';
 import { AdminModule } from './admin/admin.module';
 import { CloudinaryModule } from './cloudinary/cloudinary.module';
+import { FaceRecognitionModule } from './face-recognition/face-recognition.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { CloudinaryModule } from './cloudinary/cloudinary.module';
     QuestionModule,
     AdminModule,
     CloudinaryModule,
+    FaceRecognitionModule,
   ],
   controllers: [AppController, AdminController],
   providers: [AppService, PrismaService, AdminService],

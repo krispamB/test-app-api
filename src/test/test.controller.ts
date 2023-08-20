@@ -1,8 +1,8 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { TestService } from './test.service';
 import { FaceVerifyResponse, GetActiveTestsResponse } from './test.responses';
-import { FaceVerifyDto } from './dto';
 import { ApiTags } from '@nestjs/swagger';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @ApiTags('Test')
 @Controller('test')
@@ -11,8 +11,9 @@ export class TestController {
 
   //return candidate for face recognition
   @Post('faceverify')
-  faceVerify(@Body() dto: FaceVerifyDto): Promise<FaceVerifyResponse> {
-    return this.testService.faceVerify(dto);
+  @UseInterceptors(FileInterceptor('image'))
+  faceVerify(@UploadedFile() file: Express.Multer.File) {
+    return this.testService.faceVerify(file)
   }
 
   codeVerify() {}
