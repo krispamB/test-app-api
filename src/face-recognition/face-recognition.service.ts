@@ -33,7 +33,7 @@ export class FaceRecognitionService {
       this.http.post(url, person, this.requestConfig).pipe(
         catchError((err: AxiosError) => {
           this.logger.error(err.response.data);
-          throw new ForbiddenException('API not available');
+          throw 'API not available';
         }),
       ),
     );
@@ -67,7 +67,7 @@ export class FaceRecognitionService {
             );
           }
         } catch (error) {
-          throw new ForbiddenException('API not available');
+          throw 'API not available';
         }
       }),
     );
@@ -88,12 +88,8 @@ export class FaceRecognitionService {
     const { data } = await firstValueFrom(
       this.http.post(url, postData, this.requestConfig).pipe(
         catchError((err: AxiosError) => {
-          if (err.response.data) {
-            this.logger.error(err.response.data);
-          }
-          this.logger.error(err);
-
-          throw new ForbiddenException('API not available');
+          this.logger.error(err.response.data);
+          throw 'API not available';
         }),
       ),
     );
@@ -114,7 +110,7 @@ export class FaceRecognitionService {
       this.http.post(url, postData, this.requestConfig).pipe(
         catchError((err: AxiosError) => {
           this.logger.error(err.response.data);
-          throw new ForbiddenException('API not available');
+          throw 'API not available';
         }),
       ),
     );
