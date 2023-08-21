@@ -5,6 +5,6 @@ import { FaceRecognitionService } from 'src/face-recognition/face-recognition.se
 
 @Module({
   imports: [HttpModule],
-  providers: [FaceRecognitionService]
+  providers: [FaceRecognitionService],
 })
 export class AdminModule {}

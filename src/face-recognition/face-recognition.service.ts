@@ -38,7 +38,7 @@ export class FaceRecognitionService {
       ),
     );
 
-    return data
+    return data;
   }
 
   async getImageAsBase64(imgUrls: string[]): Promise<string[]> {
@@ -88,7 +88,11 @@ export class FaceRecognitionService {
     const { data } = await firstValueFrom(
       this.http.post(url, postData, this.requestConfig).pipe(
         catchError((err: AxiosError) => {
-          this.logger.error(err.response.data);
+          if (err.response.data) {
+            this.logger.error(err.response.data);
+          }
+          this.logger.error(err);
+
           throw new ForbiddenException('API not available');
         }),
       ),

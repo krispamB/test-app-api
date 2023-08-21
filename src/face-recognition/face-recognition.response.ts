@@ -1,3 +1,3 @@
-import { Person } from "./face-recognition.types";
+import { Person } from './face-recognition.types';
 
-export type FindPerson = Person[]
+export type FindPerson = Person[];

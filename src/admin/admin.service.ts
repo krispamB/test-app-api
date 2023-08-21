@@ -44,9 +44,8 @@ export class AdminService {
     });
 
     const base64Strings: string[] = files.map((file) => {
-      return file.buffer.toString('base64')
-    })
-
+      return file.buffer.toString('base64');
+    });
 
     const createFaceData: CreatePerson = {
       id: newCandidate.id,
@@ -59,8 +58,7 @@ export class AdminService {
       is_bulk_insert: false,
     };
 
-    await this.face.createPerson(createFaceData)
-    ;
+    await this.face.createPerson(createFaceData);
 
     return newCandidate;
   }

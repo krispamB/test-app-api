@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Param, Post, UploadedFile, UseInterceptors } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  UploadedFile,
+  UseInterceptors,
+} from '@nestjs/common';
 import { TestService } from './test.service';
 import { FaceVerifyResponse, GetActiveTestsResponse } from './test.responses';
 import { ApiTags } from '@nestjs/swagger';
@@ -13,7 +21,7 @@ export class TestController {
   @Post('faceverify')
   @UseInterceptors(FileInterceptor('image'))
   faceVerify(@UploadedFile() file: Express.Multer.File) {
-    return this.testService.faceVerify(file)
+    return this.testService.faceVerify(file);
   }
 
   codeVerify() {}

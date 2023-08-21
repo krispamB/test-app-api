@@ -1,4 +1,4 @@
 export class CodeVerifyDto {
-  matric_number: string
-  code: string
+  matric_number: string;
+  code: string;
 }
