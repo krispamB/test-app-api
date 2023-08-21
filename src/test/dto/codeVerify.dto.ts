@@ -1,4 +1,7 @@
+import { IsNotEmpty, IsString } from 'class-validator';
+
 export class CodeVerifyDto {
-  matric_number: string;
+  @IsNotEmpty()
+  @IsString()
   code: string;
 }

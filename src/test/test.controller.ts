@@ -13,6 +13,7 @@ import { FaceVerifyResponse, GetActiveTestsResponse } from './test.responses';
 import { ApiTags } from '@nestjs/swagger';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { CandidateJwtGuard } from './Guard';
+import { CodeVerifyDto } from './dto/codeVerify.dto';
 
 @ApiTags('Test')
 @Controller('test')
@@ -26,7 +27,10 @@ export class TestController {
     return this.testService.faceVerify(file);
   }
 
-  codeVerify() {}
+  @Post('codeVerify')
+  codeVerify(@Body() dto: CodeVerifyDto) {
+    return this.testService.codeVerify(dto);
+  }
 
   @UseGuards(CandidateJwtGuard)
   @Get()

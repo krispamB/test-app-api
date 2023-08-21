@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  ForbiddenException,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
@@ -58,13 +59,39 @@ export class TestService {
       });
   }
 
-  async faceVerifyII() {}
+  async codeVerify(dto: CodeVerifyDto) {
+    const candidate: Candidate = await this.prisma.candidate.findFirst({
+      where: {
+        emergencyCode: {
+          contains: dto.code,
+        },
+      },
+    });
 
-  async test() {}
+    if (!candidate) {
+      throw new NotFoundException('Code not found');
+    }
 
-  async codeVerify(dto: CodeVerifyDto) {}
+    const token: string = await this.signToken(
+      candidate.id,
+      candidate.matric_number,
+    );
 
-  async startSession() {}
+    await this.prisma.candidate.update({
+      where: {
+        id: candidate.id,
+      },
+      data: {
+        emergencyCode: null,
+      },
+    });
+
+    return {
+      name: candidate.fullname,
+      mat_no: candidate.matric_number,
+      access_token: token,
+    };
+  }
 
   async getActiveTests(): Promise<GetActiveTestsResponse> {
     const activeTests = await this.prisma.exam.findMany({

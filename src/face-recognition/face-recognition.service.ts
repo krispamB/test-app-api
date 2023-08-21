@@ -27,6 +27,7 @@ export class FaceRecognitionService {
     },
   };
 
+  /*creates person in opencv */
   async createPerson(person: CreatePerson) {
     const url: string = this.baseUrl + '/person';
     const { data } = await firstValueFrom(
@@ -40,7 +41,8 @@ export class FaceRecognitionService {
 
     return data;
   }
-
+  /*returns an array of buffer string in base64 of from urls, it is 
+   a method I created to do just that */
   async getImageAsBase64(imgUrls: string[]): Promise<string[]> {
     const base64Images = await Promise.all(
       imgUrls.map(async (imgUrl) => {
@@ -75,6 +77,7 @@ export class FaceRecognitionService {
     return base64Images;
   }
 
+  /*it searches storage for person matching the image sent */
   async searchStorage(base64String: string): Promise<FindPerson> {
     const url: string = this.baseUrl + '/search';
     const postData = {
