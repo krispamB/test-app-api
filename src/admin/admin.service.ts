@@ -119,7 +119,9 @@ export class AdminService {
       },
     });
 
-    return candidate;
+    return {
+      code,
+    };
   }
 
   // utility functions
