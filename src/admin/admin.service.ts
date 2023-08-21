@@ -102,6 +102,8 @@ export class AdminService {
     //
   }
 
+  async deleteCandidate() {}
+
   async createEmergencyCode(
     candidateId: string,
   ): Promise<CreateEmergencyCodeResponse> {

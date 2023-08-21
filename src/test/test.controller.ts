@@ -5,12 +5,14 @@ import {
   Param,
   Post,
   UploadedFile,
+  UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 import { TestService } from './test.service';
 import { FaceVerifyResponse, GetActiveTestsResponse } from './test.responses';
 import { ApiTags } from '@nestjs/swagger';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { CandidateJwtGuard } from './Guard';
 
 @ApiTags('Test')
 @Controller('test')
@@ -26,16 +28,19 @@ export class TestController {
 
   codeVerify() {}
 
+  @UseGuards(CandidateJwtGuard)
   @Get()
   getActiveTests(): Promise<GetActiveTestsResponse> {
     return this.testService.getActiveTests();
   }
 
+  @UseGuards(CandidateJwtGuard)
   @Get('get/:id')
   getTestById(@Param('id') examId: string) {
     return this.testService.getTestById(examId);
   }
 
+  @UseGuards(CandidateJwtGuard)
   @Post()
   submitTest() {}
 }

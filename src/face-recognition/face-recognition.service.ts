@@ -117,4 +117,20 @@ export class FaceRecognitionService {
 
     return data;
   }
+
+  async editPerson() {}
+
+  async deletePerson(person_id: string) {
+    const url: string = this.baseUrl + `/person/${person_id}`;
+
+    const { data } = await firstValueFrom(
+      this.http.delete(url, this.requestConfig).pipe(
+        catchError((err: AxiosError) => {
+          this.logger.error(err.response.data);
+          throw 'API not available';
+        }),
+      ),
+    );
+    return data;
+  }
 }

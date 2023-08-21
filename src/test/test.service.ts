@@ -13,6 +13,9 @@ import { FaceVerifyDto } from './dto';
 import { CodeVerifyDto } from './dto/codeVerify.dto';
 import { FaceRecognitionService } from 'src/face-recognition/face-recognition.service';
 import { FindPerson } from 'src/face-recognition/face-recognition.response';
+import { Candidate } from '@prisma/client';
+import { JwtService } from '@nestjs/jwt';
+import { ConfigService } from '@nestjs/config';
 
 /*Update candidate table to contain an emergencyCode field that is a null value by default
  create an emergencyCode function that creates a 6 digit code and patches the candidate 
@@ -23,6 +26,8 @@ export class TestService {
   constructor(
     private prisma: PrismaService,
     private face: FaceRecognitionService,
+    private jwt: JwtService,
+    private config: ConfigService,
   ) {}
 
   async faceVerify(file: Express.Multer.File) {
@@ -35,11 +40,20 @@ export class TestService {
         } else {
           let id = res[0].id;
 
-          return await this.prisma.candidate.findUnique({
+          const candidate: Candidate = await this.prisma.candidate.findUnique({
             where: {
               id,
             },
           });
+
+          return {
+            name: candidate.fullname,
+            mat_no: candidate.matric_number,
+            access_token: await this.signToken(
+              candidate.id,
+              candidate.matric_number,
+            ),
+          };
         }
       });
   }
@@ -73,5 +87,18 @@ export class TestService {
       throw new BadRequestException('Could not find a test with the given ID');
 
     return exam;
+  }
+
+  //Utils functions
+  async signToken(id: string, mat_no: string): Promise<string> {
+    const payload = {
+      sub: id,
+      mat_no,
+    };
+
+    return await this.jwt.signAsync(payload, {
+      expiresIn: this.config.get('JWT_EXP_TIME'),
+      secret: this.config.get('JWT_SECRET_KEY'),
+    });
   }
 }
