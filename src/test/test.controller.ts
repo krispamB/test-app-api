@@ -12,8 +12,8 @@ import { TestService } from './test.service';
 import { FaceVerifyResponse, GetActiveTestsResponse } from './test.responses';
 import { ApiTags } from '@nestjs/swagger';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { CandidateJwtGuard } from './Guard';
 import { CodeVerifyDto } from './dto/codeVerify.dto';
+import { CandidateJwtGuard } from 'src/auth/Guard';
 
 @ApiTags('Test')
 @Controller('test')
