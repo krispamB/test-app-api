@@ -10,9 +10,8 @@ import {
   Post,
   UseGuards,
 } from '@nestjs/common';
-import { JwtGuard } from 'src/auth/Guard';
+import { JwtGuard, UniversalJwtGuard } from 'src/auth/Guard';
 import { CreateQuestionDto, UpdateQuestionDto } from './dto';
-import { GetExaminer } from 'src/auth/decorator';
 import { Question, Option } from '@prisma/client';
 import { QuestionService } from './question.service';
 import { CreateQuestionResponse } from './question.response';
@@ -33,11 +32,13 @@ export class QuestionController {
     return this.questionService.createQuestion(dto, examId);
   }
 
+  @UseGuards(UniversalJwtGuard)
   @Get('all/:id')
   getQuestion(@Param('id') examId: string): Promise<Question[]> {
     return this.questionService.getQuestion(examId);
   }
 
+  @UseGuards(UniversalJwtGuard)
   @Get('options/:id')
   getOptions(@Param('id') questionId: string): Promise<Option[]> {
     return this.questionService.getOptions(questionId);
