@@ -15,7 +15,6 @@ import {
 import { AdminService } from './admin.service';
 import { JwtGuard } from 'src/auth/Guard';
 import { CreateCandidateDto } from './dto';
-import { FilesInterceptor } from '@nestjs/platform-express';
 import { RolesDecorator } from './Decorator/role.decorator';
 import { RolesGuard } from './Guard/role.guard';
 import {
@@ -36,12 +35,8 @@ export class AdminController {
   @RolesDecorator('ADMIN')
   @UseGuards(RolesGuard)
   @Post('candidate')
-  @UseInterceptors(FilesInterceptor('files'))
-  addCandidate(
-    @Body() dto: CreateCandidateDto,
-    @UploadedFiles() files: Express.Multer.File[],
-  ) {
-    return this.adminService.addCandidate(dto, files);
+  addCandidate(@Body() dto: CreateCandidateDto) {
+    return this.adminService.addCandidate(dto);
   }
 
   @RolesDecorator('ADMIN')

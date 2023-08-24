@@ -24,7 +24,7 @@ export class AdminService {
 
   private CODE_LENGTH: number = 6;
 
-  async addCandidate(dto: CreateCandidateDto, files: Express.Multer.File[]) {
+  async addCandidate(dto: CreateCandidateDto) {
     const candidateExists = await this.prisma.candidate.findUnique({
       where: {
         matric_number: dto.matric_number,
@@ -43,14 +43,10 @@ export class AdminService {
       },
     });
 
-    const base64Strings: string[] = files.map((file) => {
-      return file.buffer.toString('base64');
-    });
-
     const createFaceData: CreatePerson = {
       id: newCandidate.id,
       name: newCandidate.fullname,
-      images: base64Strings,
+      images: dto.base64,
       gender: dto.gender,
       date_of_birth: dto.dateOfBirth,
       nationality: dto.nationality,

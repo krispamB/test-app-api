@@ -18,4 +18,9 @@ export class CreateCandidateDto {
 
   @IsOptional()
   gender: string;
+
+  @IsString({
+    each: true,
+  })
+  base64: string[];
 }
