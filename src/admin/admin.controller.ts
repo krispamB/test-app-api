@@ -25,6 +25,7 @@ import {
   GetExamsResponses,
 } from './admin.response';
 import { ApiTags } from '@nestjs/swagger';
+import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 
 @ApiTags('Admin')
 @UseGuards(JwtGuard)
@@ -34,9 +35,13 @@ export class AdminController {
 
   @RolesDecorator('ADMIN')
   @UseGuards(RolesGuard)
+  @UseInterceptors(FilesInterceptor('files'))
   @Post('candidate')
-  addCandidate(@Body() dto: CreateCandidateDto) {
-    return this.adminService.addCandidate(dto);
+  addCandidate(
+    @Body() dto: CreateCandidateDto,
+    @UploadedFiles() files: Express.Multer.File[],
+  ) {
+    return this.adminService.addCandidate(dto, files);
   }
 
   @RolesDecorator('ADMIN')
