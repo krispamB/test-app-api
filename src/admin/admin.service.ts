@@ -25,6 +25,10 @@ export class AdminService {
   private CODE_LENGTH: number = 6;
 
   async addCandidate(dto: CreateCandidateDto, files: Express.Multer.File[]) {
+    if(files.length < 1) {
+      throw new BadRequestException('No image files added')
+    }
+
     const candidateExists = await this.prisma.candidate.findUnique({
       where: {
         matric_number: dto.matric_number,
