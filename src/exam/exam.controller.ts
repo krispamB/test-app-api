@@ -10,7 +10,7 @@ import {
 } from '@nestjs/common';
 import { JwtGuard, UniversalJwtGuard } from 'src/auth/Guard';
 import { CreateTestDto, editTestDto } from './dto';
-import { GetExaminer } from 'src/auth/decorator';
+import { GetUser } from 'src/auth/decorator';
 import { Exam } from '@prisma/client';
 import { ExamService } from './exam.service';
 import { ApiTags } from '@nestjs/swagger';
@@ -23,14 +23,14 @@ export class ExamController {
   @Post('create')
   async createTest(
     @Body() dto: CreateTestDto,
-    @GetExaminer('id') examinerId: string,
+    @GetUser('id') examinerId: string,
   ): Promise<Exam> {
     return await this.examService.createTest(dto, examinerId);
   }
 
   @UseGuards(JwtGuard)
   @Get('getAll')
-  getCreatedTests(@GetExaminer('id') examinerId: string): Promise<Exam[]> {
+  getCreatedTests(@GetUser('id') examinerId: string): Promise<Exam[]> {
     return this.examService.getCreatedTests(examinerId);
   }
 
@@ -43,7 +43,7 @@ export class ExamController {
   @UseGuards(JwtGuard)
   @Patch('edit/:id')
   editExam(
-    @GetExaminer('id') examinerId: string,
+    @GetUser('id') examinerId: string,
     @Param('id') id: string,
     @Body() dto: editTestDto,
   ): Promise<object> {
@@ -59,7 +59,7 @@ export class ExamController {
   @UseGuards(JwtGuard)
   @Delete('delete/:id')
   deleteExam(
-    @GetExaminer('id') examinerId: string,
+    @GetUser('id') examinerId: string,
     @Param('id') id: string,
   ): Promise<Object> {
     return this.examService.deleteExam(examinerId, id);
