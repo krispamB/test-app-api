@@ -10,11 +10,11 @@ import {
   GetActiveTestsResponse,
   GetTestByIdResponse,
 } from './test.responses';
-import { FaceVerifyDto } from './dto';
+import { FaceVerifyDto, SubmitTestDto } from './dto';
 import { CodeVerifyDto } from './dto/codeVerify.dto';
 import { FaceRecognitionService } from 'src/face-recognition/face-recognition.service';
 import { FindPerson } from 'src/face-recognition/face-recognition.response';
-import { Candidate } from '@prisma/client';
+import { Candidate, Exam, Option, Results } from '@prisma/client';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 
@@ -116,6 +116,40 @@ export class TestService {
     return exam;
   }
 
+  async submitTest(
+    examId: string,
+    dto: SubmitTestDto,
+    candidateId: string,
+    matric_number: string,
+  ) {
+    const correctOptions = await this.prisma.option.findMany({
+      where: {
+        examId,
+        isCorrect: true,
+      },
+      select: {
+        id: true,
+      },
+    });
+
+    const correctOptionId: string[] = correctOptions.map((index) => index.id);
+    const score: number = await this.mark(dto.selectedOptions, correctOptionId);
+    const percent: number = this.getPercent(score, correctOptions.length);
+
+    const responseData = {
+      matric_number,
+      score,
+      percent,
+      candidateId,
+      examId,
+    };
+
+    const results: Results = await this.prisma.results.create({
+      data: responseData,
+    });
+    return results;
+  }
+
   //Utils functions
   async signToken(id: string, mat_no: string): Promise<string> {
     const payload = {
@@ -127,5 +161,23 @@ export class TestService {
       expiresIn: this.config.get('JWT_EXP_TIME'),
       secret: this.config.get('JWT_SECRET_KEY'),
     });
+  }
+
+  async mark(
+    candidateAnswers: string[],
+    correctAnswersId: string[],
+  ): Promise<number> {
+    let score: number = 0;
+    const correctAnswersSet = new Set(correctAnswersId);
+
+    for (const answer of candidateAnswers) {
+      if (correctAnswersSet.has(answer)) score++;
+    }
+
+    return score;
+  }
+
+  getPercent(number: number, total: number): number {
+    return (number / total) * 100;
   }
 }

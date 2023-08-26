@@ -14,6 +14,8 @@ import { ApiTags } from '@nestjs/swagger';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { CodeVerifyDto } from './dto/codeVerify.dto';
 import { CandidateJwtGuard } from 'src/auth/Guard';
+import { SubmitTestDto } from './dto';
+import { GetExaminer } from 'src/auth/decorator';
 
 @ApiTags('Test')
 @Controller('test')
@@ -45,6 +47,13 @@ export class TestController {
   }
 
   @UseGuards(CandidateJwtGuard)
-  @Post()
-  submitTest() {}
+  @Post('submit/:id')
+  submitTest(
+    @Param('id') examId: string,
+    @Body() dto: SubmitTestDto,
+    @GetExaminer('id') candidateId: string,
+    @GetExaminer('matric_number') matric_number: string,
+  ) {
+    return this.testService.submitTest(examId, dto, candidateId, matric_number);
+  }
 }

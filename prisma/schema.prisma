@@ -36,7 +36,9 @@ model Candidate {
   matric_number String   @unique
   images        String[]
   fullname      String?
-  emergencyCode  String?
+  emergencyCode String?
+
+  result Results[]
 }
 
 model Exam {
@@ -55,6 +57,7 @@ model Exam {
 
   questions Question[]
   options   Option[]
+  results   Results[]
 }
 
 model Question {
@@ -79,6 +82,19 @@ model Option {
 
   option    String
   isCorrect Boolean @default(false)
+}
+
+model Results {
+  id            String    @id @default(uuid())
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt()
+  camdidate     Candidate @relation(fields: [candidateId], references: [id])
+  candidateId   String
+  exam          Exam      @relation(fields: [examId], references: [id])
+  examId        String
+  matric_number String
+  score         Int
+  percent       Int
 }
 
 enum Role {
