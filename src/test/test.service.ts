@@ -178,6 +178,7 @@ export class TestService {
   }
 
   getPercent(number: number, total: number): number {
-    return (number / total) * 100;
+    const percent: number = Number(((number / total) * 100).toFixed(2));
+    return percent;
   }
 }
