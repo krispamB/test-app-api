@@ -13,7 +13,7 @@ import { FaceVerifyResponse, GetActiveTestsResponse } from './test.responses';
 import { ApiTags } from '@nestjs/swagger';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { CodeVerifyDto } from './dto/codeVerify.dto';
-import { CandidateJwtGuard } from 'src/auth/Guard';
+import { CandidateJwtGuard, JwtGuard } from 'src/auth/Guard';
 import { SubmitTestDto } from './dto';
 import { GetUser } from 'src/auth/decorator';
 
@@ -55,5 +55,11 @@ export class TestController {
     @GetUser('matric_number') matric_number: string,
   ) {
     return this.testService.submitTest(examId, dto, candidateId, matric_number);
+  }
+
+  @UseGuards(JwtGuard)
+  @Get('results/:id')
+  getResults(@Param('id') examId: string) {
+    return this.testService.getResults(examId);
   }
 }

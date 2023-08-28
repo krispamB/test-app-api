@@ -163,6 +163,14 @@ export class TestService {
     });
   }
 
+  async getResults(examId: string) {
+    const results: object[] = await this.prisma.results.findMany({
+      select: { id: true, matric_number: true, score: true, percent: true },
+    });
+    return results;
+  }
+
+  //utility function
   async mark(
     candidateAnswers: string[],
     correctAnswersId: string[],
