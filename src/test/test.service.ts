@@ -186,7 +186,7 @@ export class TestService {
   }
 
   getPercent(number: number, total: number): number {
-    const percent: number = Number(((number / total) * 100).toFixed(2));
+    const percent: number = Math.round((number / total) * 100);
     return percent;
   }
 }
